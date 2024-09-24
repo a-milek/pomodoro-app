@@ -2,14 +2,18 @@ import { Button, HStack, Image } from "@chakra-ui/react";
 
 import { ColorModeSwitch } from "./ColorModeSwitch";
 
-const Header = () => {
+interface Props {
+  onClick: () => void;
+}
+
+const NavBar = ({ onClick }: Props) => {
   return (
     <>
-      <HStack w="100%">
+      <HStack>
         <Image src="src/assets/pomidoro.png" boxSize="60px" />
 
         <HStack spacing="4">
-          <Button>Settings</Button>
+          <Button onClick={() => onClick()}>Settings</Button>
           <ColorModeSwitch />
         </HStack>
       </HStack>
@@ -17,4 +21,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default NavBar;
