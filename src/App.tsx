@@ -20,7 +20,7 @@ function App() {
       }}
       width="95vw"
     >
-      <GridItem area="nav" background="red">
+      <GridItem area="nav" margin="0">
         <NavBar onClick={() => setShowSettings(!showSettings)} />
       </GridItem>
 

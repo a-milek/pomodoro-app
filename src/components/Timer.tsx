@@ -59,7 +59,7 @@ const Timer = ({ focusTime, breakTime }: Props) => {
           (timeRemaining * 100) /
             (isFocusMode ? focusTime * 60 : breakTime * 60)
         }
-        color={isFocusMode ? "red" : "green"}
+        color={isFocusMode ? "#A20021" : "#85BAA1"}
       >
         <CircularProgressLabel>
           <Heading as="h4" fontSize="3xl">
@@ -71,10 +71,15 @@ const Timer = ({ focusTime, breakTime }: Props) => {
       </CircularProgress>
 
       <HStack align="center" justify="center" spacing="10px">
-        <Button onClick={() => setActive(!isActive)}>
+        <Button
+          colorScheme={isActive ? "red" : "green"}
+          onClick={() => setActive(!isActive)}
+        >
           {isActive ? "Pause" : "Start"}
         </Button>
-        <Button onClick={resetTimer}>Reset</Button>
+        <Button colorScheme="green" onClick={resetTimer}>
+          Reset
+        </Button>
       </HStack>
     </div>
   );

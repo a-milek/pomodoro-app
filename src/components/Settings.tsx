@@ -7,6 +7,7 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  useToast,
 } from "@chakra-ui/react";
 
 interface Props {
@@ -22,10 +23,16 @@ const Settings = ({
   breakTime,
   setBreakTime,
 }: Props) => {
+  const toast = useToast();
   const handleSave = () => {
     localStorage.setItem("focusTime", focusTime.toString());
     localStorage.setItem("breakTime", breakTime.toString());
-    alert("Settings saved!");
+    toast({
+      title: "Settings saved!",
+      colorScheme: "green",
+      duration: 1000,
+      isClosable: true,
+    });
   };
   return (
     <>

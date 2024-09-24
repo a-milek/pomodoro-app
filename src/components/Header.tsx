@@ -9,11 +9,13 @@ interface Props {
 const NavBar = ({ onClick }: Props) => {
   return (
     <>
-      <HStack>
+      <HStack justifyContent="space-between">
         <Image src="src/assets/pomidoro.png" boxSize="60px" />
 
         <HStack spacing="4">
-          <Button onClick={() => onClick()}>Settings</Button>
+          <Button colorScheme="red" onClick={() => onClick()}>
+            Settings
+          </Button>
           <ColorModeSwitch />
         </HStack>
       </HStack>
