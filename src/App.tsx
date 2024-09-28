@@ -1,19 +1,24 @@
 import "./App.css";
-
 import Timer from "./components/Timer";
-
 import { Grid, GridItem } from "@chakra-ui/react";
 import Settings from "./components/Settings";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
+import SessionEndAlert from "./components/sessionEndAlert";
+import { Times } from "./configuration/Time";
 
 function App() {
+  const [times, setTimes] = useState<Times>({
+    focusTime: 0.1,
+    shortBreakTime: 0.1,
+    longBreakTime: 1,
+  });
   const [showSettings, setShowSettings] = useState(false);
+  const [visibility, setVisibility] = useState(true);
 
-  const [focusTime, setFocusTime] = useState(25);
-  const [shortBreakTime, setShortBreakTime] = useState(5);
-  const [longBreakTime, setLongBreakTime] = useState(15);
-  const [visibility, setVisibility] = useState(true); // Move visibility state here
+  const updateTimes = (newTimes: Partial<Times>) => {
+    setTimes((prevTimes) => ({ ...prevTimes, ...newTimes }));
+  };
 
   return (
     <Grid
@@ -29,24 +34,16 @@ function App() {
       <GridItem area={"main"}>
         {showSettings ? (
           <Settings
-            focusTime={focusTime}
-            setFocusTime={setFocusTime}
-            shortBreakTime={shortBreakTime}
-            setShortBreakTime={setShortBreakTime}
-            longBreakTime={longBreakTime}
-            setLongBreakTime={setLongBreakTime}
-            visibility={visibility} // Pass visibility to Settings
-            setVisibility={setVisibility} // Pass setVisibility to Settings
-          ></Settings>
-        ) : (
-          <Timer
-            focusTime={focusTime}
-            shortBreakTime={shortBreakTime}
-            longBreakTime={longBreakTime}
+            times={times}
+            updateTimes={updateTimes}
             visibility={visibility}
-          ></Timer>
+            setVisibility={setVisibility}
+          />
+        ) : (
+          <Timer times={times} visibility={visibility} />
         )}
       </GridItem>
+      <SessionEndAlert />
     </Grid>
   );
 }

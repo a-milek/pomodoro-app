@@ -2,117 +2,80 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Heading,
   HStack,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
+  Input,
   Switch,
   useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { Times } from "../configuration/Time";
+import { useEffect, useState } from "react";
 
 interface Props {
-  focusTime: number;
-  setFocusTime: React.Dispatch<React.SetStateAction<number>>;
-  shortBreakTime: number;
-  setShortBreakTime: React.Dispatch<React.SetStateAction<number>>;
-  longBreakTime: number;
-  setLongBreakTime: React.Dispatch<React.SetStateAction<number>>;
-  visibility: boolean; // Add visibility as a prop
-  setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+  times: Times;
+  updateTimes: (newTimes: Partial<Times>) => void;
+  visibility: boolean;
+  setVisibility: (visibility: boolean) => void;
 }
 
-const Settings = ({
-  focusTime,
-  setFocusTime,
-  shortBreakTime,
-  setShortBreakTime,
-  longBreakTime,
-  setLongBreakTime,
-  visibility,
-  setVisibility,
-}: Props) => {
+const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
   const toast = useToast();
+  const [tempTimes, setTempTimes] = useState(times);
+
+  useEffect(() => {
+    setTempTimes(times);
+  }, [times]);
   const handleSave = () => {
-    localStorage.setItem("focusTime", focusTime.toString());
-    localStorage.setItem("shortBreakTime", shortBreakTime.toString());
-    localStorage.setItem("longBreakTime", longBreakTime.toString());
+    updateTimes(tempTimes);
     toast({
-      title: "Settings saved!",
-      colorScheme: "green",
-      duration: 1000,
+      title: "Settings Saved.",
+      description: "Your timer settings have been updated.",
+      status: "success",
+      duration: 3000,
       isClosable: true,
     });
   };
-
   return (
-    <>
-      <FormControl width="100%" marginY={4}>
-        <FormLabel>Focus time</FormLabel>
-        <NumberInput
-          max={200}
-          min={1}
-          margin={3}
-          value={focusTime}
-          onChange={(valueString) => setFocusTime(Number(valueString))}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+    <FormControl margin={3}>
+      <FormLabel marginY={2}>Focus Time</FormLabel>
+      <Input
+        value={times.focusTime}
+        onChange={(e) => updateTimes({ focusTime: parseFloat(e.target.value) })}
+        type="number"
+        min="1"
+      />
 
-        <FormLabel>Short break time</FormLabel>
-        <NumberInput
-          max={200}
-          min={1}
-          margin={3}
-          value={shortBreakTime}
-          onChange={(valueString) => setShortBreakTime(Number(valueString))}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+      <FormLabel marginY={2}>Short Break Time</FormLabel>
+      <Input
+        value={times.shortBreakTime}
+        onChange={(e) =>
+          updateTimes({ shortBreakTime: parseFloat(e.target.value) })
+        }
+        type="number"
+        min="1"
+      />
 
-        <FormLabel>Long break time</FormLabel>
-        <NumberInput
-          max={200}
-          min={1}
-          margin={3}
-          value={longBreakTime}
-          onChange={(valueString) => setLongBreakTime(Number(valueString))}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-
-        <HStack>
-          <Heading as="h6" fontSize="l">
-            Show Remaining Time
-          </Heading>
-          <Switch
-            colorScheme="red"
-            size="lg"
-            isChecked={visibility}
-            onChange={() => setVisibility(!visibility)}
-          />
-        </HStack>
-
-        <Button mt={4} colorScheme="red" type="submit" onClick={handleSave}>
-          Save
-        </Button>
-      </FormControl>
-    </>
+      <FormLabel marginY={2}>Long Break Time</FormLabel>
+      <Input
+        value={times.longBreakTime}
+        onChange={(e) =>
+          updateTimes({ longBreakTime: parseFloat(e.target.value) })
+        }
+        type="number"
+        min="1"
+      />
+      <HStack margin={3}>
+        <FormLabel>Show Timer</FormLabel>
+        <Switch
+          colorScheme="red"
+          size="lg"
+          isChecked={visibility}
+          onChange={() => setVisibility(!visibility)}
+        />
+      </HStack>
+      <Button mt={4} colorScheme="red" type="button" onClick={handleSave}>
+        Save
+      </Button>
+    </FormControl>
   );
 };
 

@@ -7,27 +7,28 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import useSound from "use-sound";
+import { Times } from "../configuration/Time";
+import { getSessionConfig } from "../configuration/sessionConfig";
 
 interface Props {
-  focusTime: number;
-  shortBreakTime: number;
-  longBreakTime: number;
+  times: Times; // Use the Times type
   visibility: boolean;
 }
-const Timer = ({
-  focusTime,
-  shortBreakTime,
-  longBreakTime,
-  visibility,
-}: Props) => {
-  const [isFocusMode, setIsFocusMode] = useState(true);
-  const [timeRemaining, setTimeRemaining] = useState(focusTime * 60);
+
+const Timer = ({ times, visibility }: Props) => {
   const [isActive, setActive] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60); // Initial focus time in seconds
   const [sessionCounter, setSessionCounter] = useState(0);
-  const [wheelColor, setWheelColor] = useState("#A20021");
-  const [text, setText] = useState("Focus Time");
+  const [currentMode, setCurrentMode] = useState<
+    "focus" | "shortBreak" | "longBreak"
+  >("focus");
 
   const [play] = useSound("src/sounds/531031__creeeeak__bell8.wav");
+  const sessionConfig = getSessionConfig(
+    times.focusTime,
+    times.shortBreakTime,
+    times.longBreakTime
+  );
 
   useEffect(() => {
     let timerInterval: number | undefined;
@@ -39,36 +40,25 @@ const Timer = ({
     } else if (timeRemaining === 0) {
       play();
 
-      if (isFocusMode && sessionCounter < 3) {
-        setTimeRemaining(shortBreakTime * 60);
-        setWheelColor("#FFDA44");
-        setText("Short Break");
-      } else if (sessionCounter == 3) {
-        setTimeRemaining(longBreakTime * 60);
-        setWheelColor("#85BAA1");
-        setText("Long Break");
+      if (currentMode === "focus" && sessionCounter < 3) {
+        setCurrentMode("shortBreak");
+        setTimeRemaining(sessionConfig.shortBreak.time);
+      } else if (sessionCounter === 3) {
+        setCurrentMode("longBreak");
+        setTimeRemaining(sessionConfig.longBreak.time);
         setSessionCounter(0);
       } else {
-        setSessionCounter(sessionCounter + 1);
-        setTimeRemaining(focusTime * 60);
-        setWheelColor("#A20021");
-        setText("Focus Time");
+        setSessionCounter((prevCount) => prevCount + 1);
+        setCurrentMode("focus");
+        setTimeRemaining(sessionConfig.focus.time);
       }
-      setIsFocusMode(!isFocusMode);
     }
 
     return () => clearInterval(timerInterval);
-  }, [
-    isActive,
-    timeRemaining,
-    isFocusMode,
-    focusTime,
-    shortBreakTime,
-    longBreakTime,
-  ]);
+  }, [isActive, timeRemaining, currentMode, sessionCounter, times]);
 
   const resetTimer = () => {
-    setTimeRemaining(isFocusMode ? focusTime * 60 : shortBreakTime * 60);
+    setTimeRemaining(sessionConfig[currentMode].time);
     setActive(false);
   };
 
@@ -76,21 +66,16 @@ const Timer = ({
   const minutes = Math.floor((timeRemaining % 3600) / 60);
   const seconds = timeRemaining % 60;
 
+  const currentSession = sessionConfig[currentMode];
   return (
     <div>
-      <Heading>{text}:</Heading>
+      <Heading>
+        <Heading>{currentSession.text}:</Heading>
+      </Heading>
       <CircularProgress
         size="100%"
-        value={
-          100 -
-          (timeRemaining * 100) /
-            (isFocusMode
-              ? focusTime * 60
-              : text == "Short Break"
-              ? shortBreakTime * 60
-              : longBreakTime * 60)
-        }
-        color={wheelColor}
+        value={100 - (timeRemaining * 100) / currentSession.time}
+        color={currentSession.wheelColor}
       >
         <CircularProgressLabel>
           <Heading as="h4" fontSize="3xl">
@@ -98,7 +83,7 @@ const Timer = ({
               <>
                 {hours > 0 && `${hours}h `}
                 {minutes > 0 && `${minutes}m `}
-                {seconds > 0 && `${seconds}s`}
+                {seconds > 0 ? `${seconds}s` : "0s"}
               </>
             ) : (
               "Keep Going!"
