@@ -16,17 +16,17 @@ import { useState, useEffect } from "react";
 import useSound from "use-sound";
 import { Times } from "../configuration/Time";
 import { getSessionConfig } from "../configuration/sessionConfig";
-import soundFile from "../sounds/531031__creeeeak__bell8.wav";
+import soundFile from "../assets/sounds/531031__creeeeak__bell8.wav";
 
 interface Props {
-  times: Times; // Use the Times type
+  times: Times;
   visibility: boolean;
   onSessionEnd: () => void;
 }
 
 const Timer = ({ times, visibility, onSessionEnd }: Props) => {
   const [isActive, setActive] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60); // Initial focus time in seconds
+  const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60);
   const [sessionCounter, setSessionCounter] = useState(0);
   const [currentMode, setCurrentMode] = useState<
     "focus" | "shortBreak" | "longBreak"
