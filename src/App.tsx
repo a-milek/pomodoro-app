@@ -5,13 +5,15 @@ import Timer from "./components/Timer";
 import { Grid, GridItem } from "@chakra-ui/react";
 import Settings from "./components/Settings";
 import { useState } from "react";
-import NavBar from "./components/Header";
+import NavBar from "./components/NavBar";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);
 
-  const [focusTime, setFocusTime] = useState(45);
-  const [breakTime, setBreakTime] = useState(10);
+  const [focusTime, setFocusTime] = useState(25);
+  const [shortBreakTime, setShortBreakTime] = useState(5);
+  const [longBreakTime, setLongBreakTime] = useState(15);
+  const [visibility, setVisibility] = useState(true); // Move visibility state here
 
   return (
     <Grid
@@ -29,11 +31,20 @@ function App() {
           <Settings
             focusTime={focusTime}
             setFocusTime={setFocusTime}
-            breakTime={breakTime}
-            setBreakTime={setBreakTime}
+            shortBreakTime={shortBreakTime}
+            setShortBreakTime={setShortBreakTime}
+            longBreakTime={longBreakTime}
+            setLongBreakTime={setLongBreakTime}
+            visibility={visibility} // Pass visibility to Settings
+            setVisibility={setVisibility} // Pass setVisibility to Settings
           ></Settings>
         ) : (
-          <Timer focusTime={focusTime} breakTime={breakTime}></Timer>
+          <Timer
+            focusTime={focusTime}
+            shortBreakTime={shortBreakTime}
+            longBreakTime={longBreakTime}
+            visibility={visibility}
+          ></Timer>
         )}
       </GridItem>
     </Grid>
