@@ -18,12 +18,13 @@ interface Props {
 }
 
 const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
-  const toast = useToast();
-  const [tempTimes, setTempTimes] = useState(times);
+  const toast = useToast(); //toast hook (mandatory)
+  const [tempTimes, setTempTimes] = useState(times); //temporary storage for set values
 
   useEffect(() => {
     setTempTimes(times);
   }, [times]);
+
   const handleSave = () => {
     updateTimes(tempTimes);
     toast({

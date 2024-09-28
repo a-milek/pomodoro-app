@@ -42,11 +42,7 @@ function App() {
             setVisibility={setVisibility}
           />
         ) : (
-          <Timer
-            times={times}
-            visibility={visibility}
-            onSessionEnd={onOpen} // Pass onOpen function to Timer
-          />
+          <Timer times={times} visibility={visibility} onSessionEnd={onOpen} />
         )}
       </GridItem>
     </Grid>

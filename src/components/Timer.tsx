@@ -33,6 +33,8 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
   >("focus");
 
   const [play] = useSound(soundFile);
+
+  //getting sessionConfig values
   const sessionConfig = getSessionConfig(
     times.focusTime,
     times.shortBreakTime,
@@ -45,15 +47,18 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
   useEffect(() => {
     let timerInterval: number | undefined;
 
+    //counting down
     if (isActive && timeRemaining > 0) {
       timerInterval = window.setInterval(() => {
         setTimeRemaining((prevTime) => prevTime - 1);
       }, 1000);
     } else if (timeRemaining === 0) {
-      play();
+      //if end
+      play(); //play sound
       onSessionEnd();
       onOpen(); // Open the modal when the session ends
 
+      //determining modes
       if (currentMode === "focus" && sessionCounter < 3) {
         setCurrentMode("shortBreak");
         setTimeRemaining(sessionConfig.shortBreak.time);
@@ -66,17 +71,19 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
         setCurrentMode("focus");
         setTimeRemaining(sessionConfig.focus.time);
       }
-      setActive(false);
+      setActive(false); //turn off timer
     }
 
     return () => clearInterval(timerInterval);
   }, [isActive, timeRemaining, currentMode, sessionCounter, times]);
 
+  //reseting timer
   const resetTimer = () => {
-    setTimeRemaining(sessionConfig[currentMode].time);
+    setTimeRemaining(sessionConfig[currentMode].time); // Reset to current session time
     setActive(false);
   };
 
+  //Continuing after modal
   const continueTimer = () => {
     setTimeRemaining(sessionConfig[currentMode].time); // Reset to current session time
     setActive(true); // Unpause the timer
@@ -88,6 +95,7 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
   const seconds = timeRemaining % 60;
 
   const currentSession = sessionConfig[currentMode];
+
   return (
     <div>
       <Heading>
@@ -112,7 +120,6 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
           </Heading>
         </CircularProgressLabel>
       </CircularProgress>
-
       <HStack align="center" justify="center" spacing="10px" margin={5}>
         <Button
           colorScheme={isActive ? "red" : "green"}
@@ -120,12 +127,12 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
         >
           {isActive ? "Pause" : "Start"}
         </Button>
+
         <Button colorScheme="green" onClick={resetTimer}>
           Reset
         </Button>
       </HStack>
-
-      {/* Modal for session end */}
+      //Modal with a session ending message
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

@@ -12,6 +12,7 @@ const config: ThemeConfig = {
 const theme = extendTheme({
   config,
   colors: {
+    // color Palette
     gray: {
       50: "#e3f6fc",
       100: "#cddce3",
