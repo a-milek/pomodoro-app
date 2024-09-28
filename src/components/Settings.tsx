@@ -27,8 +27,8 @@ const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
   const handleSave = () => {
     updateTimes(tempTimes);
     toast({
-      title: "Settings Saved.",
-      description: "Your timer settings have been updated.",
+      title: "Settings Saved!",
+      description: "Your settings have been updated.",
       status: "success",
       duration: 3000,
       isClosable: true,

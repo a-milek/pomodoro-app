@@ -1,4 +1,4 @@
-import { Button, HStack, Image } from "@chakra-ui/react";
+import { Button, Heading, HStack, Image, Text } from "@chakra-ui/react";
 
 import { ColorModeSwitch } from "./ColorModeSwitch";
 

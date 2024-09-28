@@ -1,24 +1,26 @@
 import "./App.css";
 import Timer from "./components/Timer";
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 import Settings from "./components/Settings";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
-import SessionEndAlert from "./components/sessionEndAlert";
 import { Times } from "./configuration/Time";
 
 function App() {
   const [times, setTimes] = useState<Times>({
-    focusTime: 0.1,
-    shortBreakTime: 0.1,
-    longBreakTime: 1,
+    focusTime: 25,
+    shortBreakTime: 5,
+    longBreakTime: 15,
   });
+
   const [showSettings, setShowSettings] = useState(false);
   const [visibility, setVisibility] = useState(true);
 
   const updateTimes = (newTimes: Partial<Times>) => {
     setTimes((prevTimes) => ({ ...prevTimes, ...newTimes }));
   };
+
+  const { onOpen } = useDisclosure();
 
   return (
     <Grid
@@ -40,10 +42,13 @@ function App() {
             setVisibility={setVisibility}
           />
         ) : (
-          <Timer times={times} visibility={visibility} />
+          <Timer
+            times={times}
+            visibility={visibility}
+            onSessionEnd={onOpen} // Pass onOpen function to Timer
+          />
         )}
       </GridItem>
-      <SessionEndAlert />
     </Grid>
   );
 }

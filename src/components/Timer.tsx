@@ -4,6 +4,13 @@ import {
   CircularProgressLabel,
   Heading,
   HStack,
+  useDisclosure,
+  Modal,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import useSound from "use-sound";
@@ -13,9 +20,10 @@ import { getSessionConfig } from "../configuration/sessionConfig";
 interface Props {
   times: Times; // Use the Times type
   visibility: boolean;
+  onSessionEnd: () => void;
 }
 
-const Timer = ({ times, visibility }: Props) => {
+const Timer = ({ times, visibility, onSessionEnd }: Props) => {
   const [isActive, setActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60); // Initial focus time in seconds
   const [sessionCounter, setSessionCounter] = useState(0);
@@ -30,6 +38,9 @@ const Timer = ({ times, visibility }: Props) => {
     times.longBreakTime
   );
 
+  // Modal control
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   useEffect(() => {
     let timerInterval: number | undefined;
 
@@ -39,6 +50,8 @@ const Timer = ({ times, visibility }: Props) => {
       }, 1000);
     } else if (timeRemaining === 0) {
       play();
+      onSessionEnd();
+      onOpen(); // Open the modal when the session ends
 
       if (currentMode === "focus" && sessionCounter < 3) {
         setCurrentMode("shortBreak");
@@ -52,6 +65,7 @@ const Timer = ({ times, visibility }: Props) => {
         setCurrentMode("focus");
         setTimeRemaining(sessionConfig.focus.time);
       }
+      setActive(false);
     }
 
     return () => clearInterval(timerInterval);
@@ -60,6 +74,12 @@ const Timer = ({ times, visibility }: Props) => {
   const resetTimer = () => {
     setTimeRemaining(sessionConfig[currentMode].time);
     setActive(false);
+  };
+
+  const continueTimer = () => {
+    setTimeRemaining(sessionConfig[currentMode].time); // Reset to current session time
+    setActive(true); // Unpause the timer
+    onClose(); // Close the modal
   };
 
   const hours = Math.floor(timeRemaining / 3600);
@@ -83,7 +103,7 @@ const Timer = ({ times, visibility }: Props) => {
               <>
                 {hours > 0 && `${hours}h `}
                 {minutes > 0 && `${minutes}m `}
-                {seconds > 0 ? `${seconds}s` : "0s"}
+                {seconds > 0 && `${seconds}s`}
               </>
             ) : (
               "Keep Going!"
@@ -103,6 +123,23 @@ const Timer = ({ times, visibility }: Props) => {
           Reset
         </Button>
       </HStack>
+
+      {/* Modal for session end */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Your session has ended</ModalHeader>
+          <ModalCloseButton />
+          <ModalFooter>
+            <Button colorScheme="green" onClick={continueTimer}>
+              Continue
+            </Button>
+            <Button colorScheme="red" onClick={onClose} ml={3}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
