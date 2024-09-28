@@ -132,7 +132,7 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
           Reset
         </Button>
       </HStack>
-      //Modal with a session ending message
+      {/*Modal with a session ending message */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
