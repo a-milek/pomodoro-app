@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 import useSound from "use-sound";
 import { Times } from "../configuration/Time";
 import { getSessionConfig } from "../configuration/sessionConfig";
+import soundFile from "../sounds/531031__creeeeak__bell8.wav";
 
 interface Props {
   times: Times; // Use the Times type
@@ -31,7 +32,7 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
     "focus" | "shortBreak" | "longBreak"
   >("focus");
 
-  const [play] = useSound("../sounds/531031__creeeeak__bell8.wav");
+  const [play] = useSound(soundFile);
   const sessionConfig = getSessionConfig(
     times.focusTime,
     times.shortBreakTime,
