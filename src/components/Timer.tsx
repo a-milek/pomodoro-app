@@ -31,7 +31,7 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
     "focus" | "shortBreak" | "longBreak"
   >("focus");
 
-  const [play] = useSound("src/sounds/531031__creeeeak__bell8.wav");
+  const [play] = useSound("../sounds/531031__creeeeak__bell8.wav");
   const sessionConfig = getSessionConfig(
     times.focusTime,
     times.shortBreakTime,
