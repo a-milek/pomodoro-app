@@ -1,12 +1,13 @@
 import "./App.css";
 import Timer from "./components/Timer";
-import { Grid, GridItem, useDisclosure } from "@chakra-ui/react";
+import { Grid, GridItem, useDisclosure, useToast } from "@chakra-ui/react";
 import Settings from "./components/Settings";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { Times } from "./configuration/Time";
 
 function App() {
+  const toast = useToast(); //toast hook (mandatory)
   const [times, setTimes] = useState<Times>({
     focusTime: 25,
     shortBreakTime: 5,
@@ -40,6 +41,18 @@ function App() {
             updateTimes={updateTimes}
             visibility={visibility}
             setVisibility={setVisibility}
+            handleSave={(tempTimes) => {
+              updateTimes(tempTimes);
+
+              toast({
+                title: "Settings Saved!",
+                description: "Your settings have been updated.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+              });
+              setShowSettings(false);
+            }}
           />
         ) : (
           <Timer times={times} visibility={visibility} onSessionEnd={onOpen} />

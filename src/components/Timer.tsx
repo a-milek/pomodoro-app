@@ -125,7 +125,7 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
           colorScheme={isActive ? "red" : "green"}
           onClick={() => setActive(!isActive)}
         >
-          {isActive ? "Pause" : "Start"}
+          {isActive ? "Pause" : "Resume"}
         </Button>
 
         <Button colorScheme="green" onClick={resetTimer}>

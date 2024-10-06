@@ -5,7 +5,6 @@ import {
   HStack,
   Input,
   Switch,
-  useToast,
 } from "@chakra-ui/react";
 import { Times } from "../configuration/Time";
 import { useEffect, useState } from "react";
@@ -15,26 +14,22 @@ interface Props {
   updateTimes: (newTimes: Partial<Times>) => void;
   visibility: boolean;
   setVisibility: (visibility: boolean) => void;
+  handleSave: (tempTimes: Times) => void;
 }
 
-const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
-  const toast = useToast(); //toast hook (mandatory)
+const Settings = ({
+  times,
+  updateTimes,
+  visibility,
+  setVisibility,
+  handleSave,
+}: Props) => {
   const [tempTimes, setTempTimes] = useState(times); //temporary storage for set values
 
   useEffect(() => {
     setTempTimes(times);
   }, [times]);
 
-  const handleSave = () => {
-    updateTimes(tempTimes);
-    toast({
-      title: "Settings Saved!",
-      description: "Your settings have been updated.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-  };
   return (
     <FormControl margin={3}>
       <FormLabel marginY={2}>Focus Time</FormLabel>
@@ -42,7 +37,6 @@ const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
         value={times.focusTime}
         onChange={(e) => updateTimes({ focusTime: parseFloat(e.target.value) })}
         type="number"
-        min="1"
       />
 
       <FormLabel marginY={2}>Short Break Time</FormLabel>
@@ -52,7 +46,6 @@ const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
           updateTimes({ shortBreakTime: parseFloat(e.target.value) })
         }
         type="number"
-        min="1"
       />
 
       <FormLabel marginY={2}>Long Break Time</FormLabel>
@@ -62,7 +55,6 @@ const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
           updateTimes({ longBreakTime: parseFloat(e.target.value) })
         }
         type="number"
-        min="1"
       />
       <HStack margin={3}>
         <FormLabel>Show Timer</FormLabel>
@@ -73,7 +65,12 @@ const Settings = ({ times, updateTimes, visibility, setVisibility }: Props) => {
           onChange={() => setVisibility(!visibility)}
         />
       </HStack>
-      <Button mt={4} colorScheme="red" type="button" onClick={handleSave}>
+      <Button
+        mt={4}
+        colorScheme="red"
+        type="button"
+        onClick={() => handleSave(tempTimes)}
+      >
         Save
       </Button>
     </FormControl>
