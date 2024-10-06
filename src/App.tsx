@@ -6,6 +6,8 @@ import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { Times } from "./configuration/Time";
 
+import Ambients from "./components/Ambients";
+
 function App() {
   const toast = useToast(); //toast hook (mandatory)
   const [times, setTimes] = useState<Times>({
@@ -55,7 +57,14 @@ function App() {
             }}
           />
         ) : (
-          <Timer times={times} visibility={visibility} onSessionEnd={onOpen} />
+          <>
+            <Timer
+              times={times}
+              visibility={visibility}
+              onSessionEnd={onOpen}
+            />
+            <Ambients></Ambients>
+          </>
         )}
       </GridItem>
     </Grid>
