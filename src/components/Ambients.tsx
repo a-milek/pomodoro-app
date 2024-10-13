@@ -8,9 +8,14 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import YoutubeEmbed from "./YoutubeEmbed";
-import videoIds from "../configuration/videoIds.json"; // Import the JSON file
+import AddNewEmbed from "./AddNewEmbed";
 
-const Ambients = () => {
+interface AmbientsProps {
+  ids: string[];
+  addId: (id: string) => void; // Ensure addId function is passed down
+}
+
+const Ambients = ({ ids, addId }: AmbientsProps) => {
   return (
     <Accordion allowToggle>
       <AccordionItem>
@@ -23,9 +28,10 @@ const Ambients = () => {
 
         <AccordionPanel>
           <SimpleGrid columns={[1, 2, 3, 4]} spacing={10}>
-            {videoIds.map((id: string) => (
+            {ids.map((id: string) => (
               <YoutubeEmbed key={id} videoId={id} />
             ))}
+            <AddNewEmbed addId={addId}></AddNewEmbed>
           </SimpleGrid>
         </AccordionPanel>
       </AccordionItem>

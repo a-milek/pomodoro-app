@@ -6,7 +6,7 @@ import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { Times } from "./configuration/Time";
 
-import Ambients from "./components/Ambients";
+import VideoIds from "./components/VideoIds";
 
 function App() {
   const toast = useToast(); //toast hook (mandatory)
@@ -63,7 +63,7 @@ function App() {
               visibility={visibility}
               onSessionEnd={onOpen}
             />
-            <Ambients></Ambients>
+            <VideoIds />
           </>
         )}
       </GridItem>
