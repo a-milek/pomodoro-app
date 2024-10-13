@@ -6,15 +6,15 @@ const VideoIds = () => {
     "sjkrrmBnpGE",
     "lGphuanCRDk",
     "HhqWd3Axq9Y",
-    "1wOAhRAqb40",
+    "TIokr8jJPkM",
     "PtIKsk1Qabw",
     "u4ecB57jFhI",
     "tMEWY4ZszUs",
   ]);
   const addId = (id: string) => {
-    setIds([...ids, id]); // Update the array by adding a new item
+    setIds([...ids, id]);
   };
-  // Shared array state
+
   return (
     <div>
       <Ambients ids={ids} addId={addId} />{" "}
