@@ -19,7 +19,7 @@ import { useRef, useState } from "react";
 import { LuPlusSquare } from "react-icons/lu";
 
 interface AddNewEmbedProps {
-  addId: (id: string) => void; // Prop to receive the function for adding an ID
+  addId: (id: string) => void;
 }
 
 const AddNewEmbed: React.FC<AddNewEmbedProps> = ({ addId }) => {

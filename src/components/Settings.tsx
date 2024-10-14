@@ -3,7 +3,8 @@ import {
   FormControl,
   FormLabel,
   HStack,
-  Input,
+  NumberInput,
+  NumberInputField,
   Switch,
 } from "@chakra-ui/react";
 import { Times } from "../configuration/Time";
@@ -33,29 +34,34 @@ const Settings = ({
   return (
     <FormControl margin={3}>
       <FormLabel marginY={2}>Focus Time</FormLabel>
-      <Input
+      <NumberInput
         value={times.focusTime}
-        onChange={(e) => updateTimes({ focusTime: parseFloat(e.target.value) })}
-        type="number"
-      />
+        onChange={(e) => updateTimes({ focusTime: parseFloat(e) })}
+        max={100}
+        min={1}
+      >
+        <NumberInputField />
+      </NumberInput>
 
       <FormLabel marginY={2}>Short Break Time</FormLabel>
-      <Input
+      <NumberInput
         value={times.shortBreakTime}
-        onChange={(e) =>
-          updateTimes({ shortBreakTime: parseFloat(e.target.value) })
-        }
-        type="number"
-      />
+        onChange={(e) => updateTimes({ shortBreakTime: parseFloat(e) })}
+        max={100}
+        min={1}
+      >
+        <NumberInputField />
+      </NumberInput>
 
       <FormLabel marginY={2}>Long Break Time</FormLabel>
-      <Input
+      <NumberInput
         value={times.longBreakTime}
-        onChange={(e) =>
-          updateTimes({ longBreakTime: parseFloat(e.target.value) })
-        }
-        type="number"
-      />
+        onChange={(e) => updateTimes({ longBreakTime: parseFloat(e) })}
+        max={100}
+        min={1}
+      >
+        <NumberInputField />
+      </NumberInput>
       <HStack margin={3}>
         <FormLabel>Show Timer</FormLabel>
         <Switch

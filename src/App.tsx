@@ -10,17 +10,26 @@ import VideoIds from "./components/VideoIds";
 
 function App() {
   const toast = useToast(); //toast hook (mandatory)
-  const [times, setTimes] = useState<Times>({
-    focusTime: 25,
-    shortBreakTime: 5,
-    longBreakTime: 15,
+  const [times, setTimes] = useState<Times>(() => {
+    const savedTimes = localStorage.getItem("times");
+    return savedTimes
+      ? JSON.parse(savedTimes)
+      : {
+          focusTime: 25,
+          shortBreakTime: 5,
+          longBreakTime: 15,
+        };
   });
 
   const [showSettings, setShowSettings] = useState(false);
   const [visibility, setVisibility] = useState(true);
 
   const updateTimes = (newTimes: Partial<Times>) => {
-    setTimes((prevTimes) => ({ ...prevTimes, ...newTimes }));
+    setTimes((prevTimes) => {
+      const updatedTimes = { ...prevTimes, ...newTimes };
+      localStorage.setItem("times", JSON.stringify(updatedTimes));
+      return updatedTimes; // Ensure we return the updated state
+    });
   };
 
   const { onOpen } = useDisclosure();

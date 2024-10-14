@@ -1,7 +1,13 @@
-import { AspectRatio, Box, Skeleton } from "@chakra-ui/react";
+import { AspectRatio, Box, IconButton, Skeleton } from "@chakra-ui/react";
 import { useState } from "react";
+import { FaTrash } from "react-icons/fa";
 
-const YoutubeEmbed = ({ videoId }: { videoId: string }) => {
+interface YoutubeEmbedProps {
+  videoId: string;
+  onDelete: () => void; // Callback to trigger deletion
+}
+
+const YoutubeEmbed = ({ videoId, onDelete }: YoutubeEmbedProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLoaded = () => {
@@ -9,7 +15,17 @@ const YoutubeEmbed = ({ videoId }: { videoId: string }) => {
   };
 
   return (
-    <Box borderRadius="2xl" overflow="hidden">
+    <Box position="relative" borderRadius="2xl" overflow="hidden">
+      <IconButton
+        aria-label="Delete video"
+        icon={<FaTrash />}
+        colorScheme="black"
+        position="absolute"
+        top="10px"
+        right="10px"
+        zIndex={2} // Ensure button appears on top of the iframe
+        onClick={onDelete} // Trigger delete function on click
+      />
       <AspectRatio maxW="560px" ratio={16 / 9}>
         {isLoading ? (
           <Skeleton>
