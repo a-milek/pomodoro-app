@@ -13,7 +13,7 @@ import AddNewEmbed from "./AddNewEmbed";
 interface AmbientsProps {
   ids: string[];
   addId: (id: string) => void;
-  deleteId: (id: string) => void; // Ensure addId function is passed down
+  deleteId: (id: string) => void;
 }
 
 const Ambients = ({ ids, addId, deleteId }: AmbientsProps) => {
@@ -28,7 +28,7 @@ const Ambients = ({ ids, addId, deleteId }: AmbientsProps) => {
         </AccordionButton>
 
         <AccordionPanel>
-          <SimpleGrid columns={[1, 2, 3, 4]} spacing={10}>
+          <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
             {ids.map((id: string) => (
               <YoutubeEmbed
                 onDelete={() => deleteId(id)}

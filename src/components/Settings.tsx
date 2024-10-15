@@ -5,6 +5,7 @@ import {
   HStack,
   NumberInput,
   NumberInputField,
+  Select,
   Switch,
 } from "@chakra-ui/react";
 import { Times } from "../configuration/Time";
@@ -25,8 +26,7 @@ const Settings = ({
   setVisibility,
   handleSave,
 }: Props) => {
-  const [tempTimes, setTempTimes] = useState(times); //temporary storage for set values
-
+  const [tempTimes, setTempTimes] = useState(times);
   useEffect(() => {
     setTempTimes(times);
   }, [times]);
@@ -62,6 +62,7 @@ const Settings = ({
       >
         <NumberInputField />
       </NumberInput>
+
       <HStack margin={3}>
         <FormLabel>Show Timer</FormLabel>
         <Switch
