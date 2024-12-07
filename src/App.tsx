@@ -1,6 +1,6 @@
 import "./App.css";
 import Timer from "./components/Timer";
-import { Grid, GridItem, useDisclosure, useToast } from "@chakra-ui/react";
+import { Grid, GridItem, useToast } from "@chakra-ui/react";
 import Settings from "./components/Settings";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
@@ -9,7 +9,7 @@ import { Times } from "./configuration/Time";
 import VideoIds from "./components/VideoIds";
 
 function App() {
-  const toast = useToast(); //toast hook (mandatory)
+  const toast = useToast(); // Toast hook
   const [times, setTimes] = useState<Times>(() => {
     const savedTimes = localStorage.getItem("times");
     return savedTimes
@@ -28,11 +28,9 @@ function App() {
     setTimes((prevTimes) => {
       const updatedTimes = { ...prevTimes, ...newTimes };
       localStorage.setItem("times", JSON.stringify(updatedTimes));
-      return updatedTimes; // Ensure we return the updated state
+      return updatedTimes;
     });
   };
-
-  const { onOpen } = useDisclosure();
 
   return (
     <Grid
@@ -41,10 +39,12 @@ function App() {
       }}
       width="95vw"
     >
+      {/* NavBar Section */}
       <GridItem area="nav" margin="0">
         <NavBar onClick={() => setShowSettings(!showSettings)} />
       </GridItem>
 
+      {/* Main Section */}
       <GridItem area={"main"}>
         {showSettings ? (
           <Settings
@@ -70,7 +70,9 @@ function App() {
             <Timer
               times={times}
               visibility={visibility}
-              onSessionEnd={onOpen}
+              onSessionEnd={() => {
+                console.log("Session Ended");
+              }}
             />
             <VideoIds />
           </>

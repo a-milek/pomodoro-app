@@ -5,7 +5,11 @@ import pomidoro from "../assets/pomidoro.png";
 import NotesDrawer from "./NotesDrawer";
 import { useEffect, useState } from "react";
 
-const NavBar = () => {
+interface Props {
+  onClick: () => void;
+}
+
+const NavBar = ({ onClick }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [note, setNote] = useState("");
 
@@ -31,8 +35,6 @@ const NavBar = () => {
         <Image src={pomidoro} boxSize="50px" alt="Pomidoro Logo" />
 
         <HStack spacing="4">
-          {/* Button to Open Notes Drawer */}
-
           <IoIosBook
             fontSize="30px"
             style={{ cursor: "pointer" }}
@@ -40,7 +42,11 @@ const NavBar = () => {
           />
 
           {/* Settings Icon */}
-          <IoMdSettings fontSize="30px" style={{ cursor: "pointer" }} />
+          <IoMdSettings
+            fontSize="30px"
+            onClick={onClick}
+            style={{ cursor: "pointer" }}
+          />
 
           {/* Color Mode Switch */}
           <ColorModeSwitch />
