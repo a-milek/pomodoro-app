@@ -1,25 +1,61 @@
-import { HStack, Image } from "@chakra-ui/react";
-
+import { HStack, Image, useDisclosure, Button } from "@chakra-ui/react";
 import { ColorModeSwitch } from "./ColorModeSwitch";
+import { IoIosBook, IoIosCreate, IoMdSettings } from "react-icons/io";
 import pomidoro from "../assets/pomidoro.png";
-import { IoMdSettings } from "react-icons/io";
+import NotesDrawer from "./NotesDrawer";
+import { useEffect, useState } from "react";
 
-interface Props {
-  onClick: () => void;
-}
+const NavBar = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [note, setNote] = useState("");
 
-const NavBar = ({ onClick }: Props) => {
+  useEffect(() => {
+    const savedNote = localStorage.getItem("note");
+    if (savedNote) setNote(savedNote);
+  }, []);
+
+  const handleSave = () => {
+    localStorage.setItem("note", note); // Save the note to localStorage
+    console.log("Note saved:", note);
+  };
+
+  const handleDiscard = () => {
+    localStorage.removeItem("note"); // Remove the note from localStorage
+    setNote(""); // Clear the note state
+    console.log("Note discarded");
+  };
+
   return (
     <>
-      <HStack justifyContent="space-between">
-        <Image src={pomidoro} boxSize="60px" />
+      <HStack justifyContent="space-between" p={4}>
+        <Image src={pomidoro} boxSize="50px" alt="Pomidoro Logo" />
 
         <HStack spacing="4">
-          <IoMdSettings fontSize="30px" onClick={() => onClick()} />
+          {/* Button to Open Notes Drawer */}
 
+          <IoIosBook
+            fontSize="30px"
+            style={{ cursor: "pointer" }}
+            onClick={onOpen}
+          />
+
+          {/* Settings Icon */}
+          <IoMdSettings fontSize="30px" style={{ cursor: "pointer" }} />
+
+          {/* Color Mode Switch */}
           <ColorModeSwitch />
         </HStack>
       </HStack>
+
+      {/* Notes Drawer */}
+      <NotesDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        note={note}
+        setNote={setNote}
+        onSave={handleSave}
+        onDiscard={handleDiscard}
+      />
     </>
   );
 };
