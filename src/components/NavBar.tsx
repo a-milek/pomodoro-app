@@ -1,6 +1,6 @@
-import { HStack, Image, useDisclosure, Button } from "@chakra-ui/react";
+import { HStack, Image, useDisclosure } from "@chakra-ui/react";
 import { ColorModeSwitch } from "./ColorModeSwitch";
-import { IoIosBook, IoIosCreate, IoMdSettings } from "react-icons/io";
+import { IoIosBook, IoMdSettings } from "react-icons/io";
 import pomidoro from "../assets/pomidoro.png";
 import NotesDrawer from "./NotesDrawer";
 import { useEffect, useState } from "react";

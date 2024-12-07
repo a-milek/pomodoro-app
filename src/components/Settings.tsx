@@ -5,7 +5,6 @@ import {
   HStack,
   NumberInput,
   NumberInputField,
-  Select,
   Switch,
 } from "@chakra-ui/react";
 import { Times } from "../configuration/Time";
