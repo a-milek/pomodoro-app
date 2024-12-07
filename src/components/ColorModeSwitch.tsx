@@ -13,7 +13,7 @@ export const ColorModeSwitch = () => {
         size="lg"
       />
       <Text whiteSpace="nowrap">
-        <FaMoon />
+        <FaMoon fontSize="20px" />
       </Text>
     </HStack>
   );

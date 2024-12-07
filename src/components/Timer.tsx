@@ -17,6 +17,7 @@ import useSound from "use-sound";
 import { Times } from "../configuration/Time";
 import { getSessionConfig } from "../configuration/sessionConfig";
 import soundFile from "../assets/sounds/531031__creeeeak__bell8.wav";
+import { IoIosPause, IoIosPlay, IoIosRefresh } from "react-icons/io";
 
 interface Props {
   times: Times;
@@ -125,11 +126,15 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
           colorScheme={isActive ? "red" : "green"}
           onClick={() => setActive(!isActive)}
         >
-          {isActive ? "Pause" : "Resume"}
+          {isActive ? (
+            <IoIosPause fontSize="20px" />
+          ) : (
+            <IoIosPlay fontSize="20px" />
+          )}
         </Button>
 
         <Button colorScheme="green" onClick={resetTimer}>
-          Reset
+          <IoIosRefresh fontSize="20px" />
         </Button>
       </HStack>
       {/*Modal with a session ending message */}
