@@ -15,9 +15,11 @@ function App() {
     return savedTimes
       ? JSON.parse(savedTimes)
       : {
-          focusTime: 25,
-          shortBreakTime: 5,
-          longBreakTime: 15,
+          times: {
+            focusTime: 25,
+            shortBreakTime: 5,
+            longBreakTime: 15,
+          },
         };
   });
 
@@ -31,6 +33,16 @@ function App() {
       return updatedTimes;
     });
   };
+
+  const updateVolume = (newVolume: number) => {
+    setVolume(newVolume);
+    localStorage.setItem("volume", JSON.stringify(newVolume)); // Save volume to localStorage
+  };
+
+  const [volume, setVolume] = useState<number>(() => {
+    const savedVolume = localStorage.getItem("volume");
+    return savedVolume ? JSON.parse(savedVolume) : 100; // default to 100 if no saved value
+  });
 
   return (
     <Grid
@@ -52,6 +64,8 @@ function App() {
             updateTimes={updateTimes}
             visibility={visibility}
             setVisibility={setVisibility}
+            volume={volume}
+            setVolume={updateVolume}
             handleSave={(tempTimes) => {
               updateTimes(tempTimes);
 
@@ -69,6 +83,7 @@ function App() {
           <>
             <Timer
               times={times}
+              volume={volume}
               visibility={visibility}
               onSessionEnd={() => {
                 console.log("Session Ended");

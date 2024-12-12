@@ -23,9 +23,10 @@ interface Props {
   times: Times;
   visibility: boolean;
   onSessionEnd: () => void;
+  volume: number;
 }
 
-const Timer = ({ times, visibility, onSessionEnd }: Props) => {
+const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
   const [isActive, setActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60);
   const [sessionCounter, setSessionCounter] = useState(0);
@@ -33,7 +34,7 @@ const Timer = ({ times, visibility, onSessionEnd }: Props) => {
     "focus" | "shortBreak" | "longBreak"
   >("focus");
 
-  const [play] = useSound(soundFile);
+  const [play] = useSound(soundFile, { volume: volume / 100 });
 
   //getting sessionConfig values
   const sessionConfig = getSessionConfig(
