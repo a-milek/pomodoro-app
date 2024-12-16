@@ -60,20 +60,22 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
       onSessionEnd();
       onOpen(); // Open the modal when the session ends
 
-      //determining modes
-      if (currentMode === "focus" && sessionCounter < 3) {
-        setCurrentMode("shortBreak");
-        setTimeRemaining(sessionConfig.shortBreak.time);
-      } else if (sessionCounter === 3) {
-        setCurrentMode("longBreak");
-        setTimeRemaining(sessionConfig.longBreak.time);
-        setSessionCounter(0);
+      if (currentMode === "focus") {
+        if (sessionCounter < 3) {
+          setCurrentMode("shortBreak");
+          setTimeRemaining(sessionConfig.shortBreak.time);
+          setSessionCounter((prevCount) => prevCount + 1);
+        } else {
+          setCurrentMode("longBreak");
+          setTimeRemaining(sessionConfig.longBreak.time);
+          setSessionCounter(0); // Reset licznika sesji
+        }
       } else {
-        setSessionCounter((prevCount) => prevCount + 1);
         setCurrentMode("focus");
         setTimeRemaining(sessionConfig.focus.time);
       }
-      setActive(false); //turn off timer
+
+      setActive(false);
     }
 
     return () => clearInterval(timerInterval);
@@ -101,6 +103,12 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
   return (
     <div>
       <Heading>
+        <Heading>
+          {" "}
+          {currentMode === "focus"
+            ? "•".repeat(sessionCounter + 1)
+            : "•".repeat(sessionCounter)}
+        </Heading>
         <Heading>{currentSession.text}:</Heading>
       </Heading>
       <CircularProgress

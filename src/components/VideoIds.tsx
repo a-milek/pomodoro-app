@@ -11,13 +11,7 @@ const VideoIds = () => {
       setIds(JSON.parse(storedIds));
     } else {
       // Default IDs if no localStorage is available
-      setIds([
-        "sjkrrmBnpGE",
-        "TIokr8jJPkM",
-        "PtIKsk1Qabw",
-        "u4ecB57jFhI",
-        "tMEWY4ZszUs",
-      ]);
+      setIds(["sjkrrmBnpGE", "TIokr8jJPkM"]);
     }
   }, []);
 
