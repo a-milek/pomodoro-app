@@ -18,11 +18,11 @@ import {
 import { useRef, useState } from "react";
 import { LuPlusSquare } from "react-icons/lu";
 
-interface AddNewEmbedProps {
+interface Props {
   addId: (id: string) => void;
 }
 
-const AddNewEmbed: React.FC<AddNewEmbedProps> = ({ addId }) => {
+const AddNewEmbed = ({ addId }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
   const [link, setLink] = useState("");

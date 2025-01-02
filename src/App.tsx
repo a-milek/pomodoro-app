@@ -12,15 +12,17 @@ function App() {
   const toast = useToast(); // Toast hook
   const [times, setTimes] = useState<Times>(() => {
     const savedTimes = localStorage.getItem("times");
-    return savedTimes
-      ? JSON.parse(savedTimes)
-      : {
-          times: {
-            focusTime: 25,
-            shortBreakTime: 5,
-            longBreakTime: 15,
-          },
-        };
+    if (savedTimes) {
+      return JSON.parse(savedTimes);
+    } else {
+      const defaultTimes = {
+        focusTime: 25,
+        shortBreakTime: 5,
+        longBreakTime: 15,
+      };
+      localStorage.setItem("times", JSON.stringify(defaultTimes));
+      return defaultTimes;
+    }
   });
 
   const [showSettings, setShowSettings] = useState(false);
