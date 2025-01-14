@@ -43,6 +43,7 @@ const NotesDrawer: React.FC<NotesDrawerProps> = ({
             placeholder="Write your notes here..."
             size="md"
             height="100%"
+            data-testid="note-input"
           />
         </DrawerBody>
 
@@ -55,7 +56,7 @@ const NotesDrawer: React.FC<NotesDrawerProps> = ({
               onClose();
             }}
           >
-            <IoMdTrash fontSize="25px" />
+            <IoMdTrash fontSize="25px" data-testid="delete-note-btn" />
           </Button>
           <Button
             colorScheme="green"
@@ -64,7 +65,7 @@ const NotesDrawer: React.FC<NotesDrawerProps> = ({
               onClose();
             }}
           >
-            <IoIosSave fontSize="25px" />
+            <IoIosSave fontSize="25px" data-testid="save-note-btn" />
           </Button>
         </DrawerFooter>
       </DrawerContent>

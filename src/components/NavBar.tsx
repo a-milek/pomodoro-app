@@ -39,6 +39,7 @@ const NavBar = ({ onClick }: Props) => {
             fontSize="30px"
             style={{ cursor: "pointer" }}
             onClick={onOpen}
+            data-testid="note-button"
           />
 
           <IoMdSettings

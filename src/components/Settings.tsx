@@ -47,7 +47,7 @@ const Settings = ({
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
       <FormControl margin={3} width="60%">
-        <FormLabel marginY={2}>Focus Time</FormLabel>
+        <FormLabel marginY={2}>Focus Time [min] </FormLabel>
         <NumberInput
           value={times.focusTime}
           onChange={(e) => updateTimes({ focusTime: parseFloat(e) })}
@@ -57,7 +57,7 @@ const Settings = ({
           <NumberInputField data-testid="input-focus" />
         </NumberInput>
 
-        <FormLabel marginY={2}>Short Break Time</FormLabel>
+        <FormLabel marginY={2}>Short Break Time [min]</FormLabel>
         <NumberInput
           value={times.shortBreakTime}
           onChange={(e) => updateTimes({ shortBreakTime: parseFloat(e) })}
@@ -67,7 +67,7 @@ const Settings = ({
           <NumberInputField data-testid="break-input" />
         </NumberInput>
 
-        <FormLabel marginY={2}>Long Break Time</FormLabel>
+        <FormLabel marginY={2}>Long Break Time [min]</FormLabel>
         <NumberInput
           value={times.longBreakTime}
           onChange={(e) => updateTimes({ longBreakTime: parseFloat(e) })}
