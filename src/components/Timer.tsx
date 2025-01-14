@@ -29,89 +29,100 @@ const Timer = ({ times, visibility, volume }: Props) => {
   const [isActive, setActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60);
   const [sessionCounter, setSessionCounter] = useState(0);
+  const [startTime, setStartTime] = useState<number | null>(null);
   const [currentMode, setCurrentMode] = useState<
     "focus" | "shortBreak" | "longBreak"
   >("focus");
 
   const [play] = useSound(soundFile, { volume: volume / 100 });
-
   const sessionConfig = getSessionConfig(
     times.focusTime,
     times.shortBreakTime,
     times.longBreakTime
   );
-
-  // Modal control
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     let timerInterval: number | undefined;
 
-    //odliczanie czasu
-    if (isActive && timeRemaining > 0) {
+    if (isActive) {
+      if (!startTime) setStartTime(Date.now());
+
       timerInterval = window.setInterval(() => {
-        setTimeRemaining((prevTime) => prevTime - 1);
-      }, 1000);
-    } else if (timeRemaining === 0) {
-      play(); //odtworzenie dźwięku końca sesji
+        if (startTime) {
+          const elapsedTime = (Date.now() - startTime) / 1000;
+          const newTimeRemaining = Math.ceil(
+            sessionConfig[currentMode].time - elapsedTime
+          );
+          setTimeRemaining(newTimeRemaining);
 
-      onOpen(); // Open the modal when the session ends
-
-      //ustalenie kolejnej sesji
-      if (currentMode === "focus") {
-        if (sessionCounter < 3) {
-          setCurrentMode("shortBreak");
-          setTimeRemaining(sessionConfig.shortBreak.time);
-          setSessionCounter((prevCount) => prevCount + 1);
-        } else {
-          setCurrentMode("longBreak");
-          setTimeRemaining(sessionConfig.longBreak.time);
-          setSessionCounter(0); // Reset licznika sesji
+          if (newTimeRemaining === 0) {
+            clearInterval(timerInterval);
+            handleSessionEnd();
+          }
         }
-      } else {
-        setCurrentMode("focus");
-        setTimeRemaining(sessionConfig.focus.time);
-      }
-
-      setActive(false);
+      }, 1000);
     }
 
     return () => clearInterval(timerInterval);
-  }, [isActive, timeRemaining, currentMode, sessionCounter, times]);
+  }, [isActive, startTime, currentMode]);
 
-  //zresetowanie timera
-  const resetTimer = () => {
-    setTimeRemaining(sessionConfig[currentMode].time); // Ustawienie pełnej długości aktualnej sesji
-    setActive(false); // wstrzymanie timera
+  const handleSessionEnd = () => {
+    play();
+    onOpen();
+
+    if (currentMode === "focus") {
+      if (sessionCounter < 3) {
+        setCurrentMode("shortBreak");
+        setTimeRemaining(sessionConfig.shortBreak.time);
+        setSessionCounter((prev) => prev + 1);
+      } else {
+        setCurrentMode("longBreak");
+        setTimeRemaining(sessionConfig.longBreak.time);
+        setSessionCounter(0);
+      }
+    } else {
+      setCurrentMode("focus");
+      setTimeRemaining(sessionConfig.focus.time);
+    }
+
+    setActive(false);
+    setStartTime(null);
   };
 
-  //Continuing after modal
+  const resetTimer = () => {
+    setTimeRemaining(sessionConfig[currentMode].time);
+    setActive(false);
+    setStartTime(null);
+  };
+
   const continueTimer = () => {
-    setTimeRemaining(sessionConfig[currentMode].time); // Reset to current session time
-    setActive(true); // Unpause the timer
-    onClose(); // Close the modal
+    setTimeRemaining(sessionConfig[currentMode].time);
+    setActive(true);
+    setStartTime(Date.now());
+    onClose();
   };
 
   const hours = Math.floor(timeRemaining / 3600);
   const minutes = Math.floor((timeRemaining % 3600) / 60);
-  const seconds = timeRemaining % 60;
+  const seconds = Math.floor(timeRemaining % 60);
 
-  const currentSession = sessionConfig[currentMode];
+  const progressValue =
+    100 - (timeRemaining * 100) / sessionConfig[currentMode].time;
 
   return (
     <div>
       <Heading>
-        <Heading>
-          {currentMode === "focus"
-            ? "•".repeat(sessionCounter + 1)
-            : "•".repeat(sessionCounter)}
-        </Heading>
-        <Heading>{currentSession.text}:</Heading>
+        {currentMode === "focus"
+          ? "•".repeat(sessionCounter + 1)
+          : "•".repeat(sessionCounter)}
       </Heading>
+      <Heading>{sessionConfig[currentMode].text}</Heading>
+
       <CircularProgress
         size="100%"
-        value={100 - (timeRemaining * 100) / currentSession.time}
-        color={currentSession.wheelColor}
+        value={progressValue}
+        color={sessionConfig[currentMode].wheelColor}
       >
         <CircularProgressLabel>
           <Heading as="h4" fontSize="3xl" data-testid="timer-display">
@@ -127,6 +138,7 @@ const Timer = ({ times, visibility, volume }: Props) => {
           </Heading>
         </CircularProgressLabel>
       </CircularProgress>
+
       <HStack align="center" justify="center" spacing="10px" margin={5}>
         <Button
           colorScheme={isActive ? "red" : "green"}
@@ -152,7 +164,7 @@ const Timer = ({ times, visibility, volume }: Props) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Your session has ended</ModalHeader>
+          <ModalHeader>Session Complete</ModalHeader>
           <ModalCloseButton />
           <ModalFooter>
             <Button
