@@ -54,7 +54,7 @@ const Settings = ({
           max={100}
           min={1}
         >
-          <NumberInputField />
+          <NumberInputField data-testid="input-focus" />
         </NumberInput>
 
         <FormLabel marginY={2}>Short Break Time</FormLabel>
@@ -64,7 +64,7 @@ const Settings = ({
           max={100}
           min={1}
         >
-          <NumberInputField />
+          <NumberInputField data-testid="break-input" />
         </NumberInput>
 
         <FormLabel marginY={2}>Long Break Time</FormLabel>
@@ -114,6 +114,7 @@ const Settings = ({
           colorScheme="red"
           type="button"
           onClick={() => handleSave(tempTimes)}
+          data-testid="save-button"
         >
           Save
         </Button>

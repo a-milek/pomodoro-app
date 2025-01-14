@@ -22,11 +22,10 @@ import { IoIosPause, IoIosPlay, IoIosRefresh } from "react-icons/io";
 interface Props {
   times: Times;
   visibility: boolean;
-  onSessionEnd: () => void;
   volume: number;
 }
 
-const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
+const Timer = ({ times, visibility, volume }: Props) => {
   const [isActive, setActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60);
   const [sessionCounter, setSessionCounter] = useState(0);
@@ -36,7 +35,6 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
 
   const [play] = useSound(soundFile, { volume: volume / 100 });
 
-  //getting sessionConfig values
   const sessionConfig = getSessionConfig(
     times.focusTime,
     times.shortBreakTime,
@@ -49,17 +47,17 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
   useEffect(() => {
     let timerInterval: number | undefined;
 
-    //counting down
+    //odliczanie czasu
     if (isActive && timeRemaining > 0) {
       timerInterval = window.setInterval(() => {
         setTimeRemaining((prevTime) => prevTime - 1);
       }, 1000);
     } else if (timeRemaining === 0) {
-      //if end
-      play(); //play sound
-      onSessionEnd();
+      play(); //odtworzenie dźwięku końca sesji
+
       onOpen(); // Open the modal when the session ends
 
+      //ustalenie kolejnej sesji
       if (currentMode === "focus") {
         if (sessionCounter < 3) {
           setCurrentMode("shortBreak");
@@ -81,10 +79,10 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
     return () => clearInterval(timerInterval);
   }, [isActive, timeRemaining, currentMode, sessionCounter, times]);
 
-  //reseting timer
+  //zresetowanie timera
   const resetTimer = () => {
-    setTimeRemaining(sessionConfig[currentMode].time); // Reset to current session time
-    setActive(false);
+    setTimeRemaining(sessionConfig[currentMode].time); // Ustawienie pełnej długości aktualnej sesji
+    setActive(false); // wstrzymanie timera
   };
 
   //Continuing after modal
@@ -104,7 +102,6 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
     <div>
       <Heading>
         <Heading>
-          {" "}
           {currentMode === "focus"
             ? "•".repeat(sessionCounter + 1)
             : "•".repeat(sessionCounter)}
@@ -117,7 +114,7 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
         color={currentSession.wheelColor}
       >
         <CircularProgressLabel>
-          <Heading as="h4" fontSize="3xl">
+          <Heading as="h4" fontSize="3xl" data-testid="timer-display">
             {visibility ? (
               <>
                 {hours > 0 && `${hours}h `}
@@ -134,6 +131,7 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
         <Button
           colorScheme={isActive ? "red" : "green"}
           onClick={() => setActive(!isActive)}
+          data-testid="start-button"
         >
           {isActive ? (
             <IoIosPause fontSize="20px" />
@@ -142,18 +140,26 @@ const Timer = ({ times, visibility, onSessionEnd, volume }: Props) => {
           )}
         </Button>
 
-        <Button colorScheme="green" onClick={resetTimer}>
+        <Button
+          colorScheme="green"
+          onClick={resetTimer}
+          data-testid="reset-button"
+        >
           <IoIosRefresh fontSize="20px" />
         </Button>
       </HStack>
-      {/*Modal with a session ending message */}
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Your session has ended</ModalHeader>
           <ModalCloseButton />
           <ModalFooter>
-            <Button colorScheme="green" onClick={continueTimer}>
+            <Button
+              colorScheme="green"
+              onClick={continueTimer}
+              data-testid="modal-button"
+            >
               Continue
             </Button>
             <Button colorScheme="red" onClick={onClose} ml={3}>

@@ -75,7 +75,7 @@ const AddNewEmbed = ({ addId }: Props) => {
         cursor="pointer"
       >
         <VStack>
-          <LuPlusSquare size="30%" />
+          <LuPlusSquare size="30%" data-testid="new_embed" />
           <Heading size="l">Add your own!</Heading>
         </VStack>
       </Center>
@@ -95,9 +95,14 @@ const AddNewEmbed = ({ addId }: Props) => {
               <FormControl isInvalid={!!error}>
                 <FormLabel>Youtube link:</FormLabel>
                 <Input
+                  data-testid="embed-input"
                   onChange={(e) => setLink(e.target.value)} // Handle input changes
                 />
-                {error && <FormErrorMessage>{error}</FormErrorMessage>}{" "}
+                {error && (
+                  <FormErrorMessage data-testid="form-error">
+                    {error}
+                  </FormErrorMessage>
+                )}{" "}
                 {/* Display error if present */}
               </FormControl>
             </AlertDialogBody>
@@ -106,7 +111,12 @@ const AddNewEmbed = ({ addId }: Props) => {
               <Button ref={cancelRef} onClick={onClose} colorScheme="red">
                 Cancel
               </Button>
-              <Button colorScheme="green" onClick={handleAddEmbed} ml={3}>
+              <Button
+                data-testid="add-embed"
+                colorScheme="green"
+                onClick={handleAddEmbed}
+                ml={3}
+              >
                 Add Embed
               </Button>
             </AlertDialogFooter>

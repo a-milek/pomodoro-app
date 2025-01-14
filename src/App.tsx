@@ -10,17 +10,20 @@ import VideoIds from "./components/VideoIds";
 
 function App() {
   const toast = useToast(); // Toast hook
+
   const [times, setTimes] = useState<Times>(() => {
     const savedTimes = localStorage.getItem("times");
     if (savedTimes) {
-      return JSON.parse(savedTimes);
+      //sprawdzenie czy obiekt nie jest pusty
+      return JSON.parse(savedTimes); //sparsowanie ustawionych warości
     } else {
       const defaultTimes = {
+        // domyślne wartości
         focusTime: 25,
         shortBreakTime: 5,
         longBreakTime: 15,
       };
-      localStorage.setItem("times", JSON.stringify(defaultTimes));
+      localStorage.setItem("times", JSON.stringify(defaultTimes)); //ustawienie w LocalSotrage domyślnych wartosći
       return defaultTimes;
     }
   });
@@ -83,14 +86,7 @@ function App() {
           />
         ) : (
           <>
-            <Timer
-              times={times}
-              volume={volume}
-              visibility={visibility}
-              onSessionEnd={() => {
-                console.log("Session Ended");
-              }}
-            />
+            <Timer times={times} volume={volume} visibility={visibility} />
             <VideoIds />
           </>
         )}

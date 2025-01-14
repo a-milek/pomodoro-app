@@ -26,7 +26,7 @@ const YoutubeEmbed = ({ videoId, onDelete }: YoutubeEmbedProps) => {
         zIndex={2} // Ensure button appears on top of the iframe
         onClick={onDelete} // Trigger delete function on click
       />
-      <AspectRatio maxW="560px" ratio={16 / 9}>
+      <AspectRatio maxW="560px" ratio={16 / 9} data-testid="embed">
         {isLoading ? (
           <Skeleton>
             <iframe

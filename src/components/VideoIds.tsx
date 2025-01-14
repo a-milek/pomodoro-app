@@ -2,16 +2,14 @@ import { useState, useEffect } from "react";
 import Ambients from "./Ambients";
 
 const VideoIds = () => {
-  const [ids, setIds] = useState<string[]>([]);
+  const [ids, setIds] = useState<string[]>([]); //inicjalizacja listy wewnętrznej
 
-  // Load stored IDs from localStorage on component mount
   useEffect(() => {
-    const storedIds = localStorage.getItem("youtubeIds");
+    const storedIds = localStorage.getItem("youtubeIds"); // pobranie istniejących Identyfikatorów
     if (storedIds) {
-      setIds(JSON.parse(storedIds));
+      setIds(JSON.parse(storedIds)); //dodanie do pamięci wewnętrznej
     } else {
-      // Default IDs if no localStorage is available
-      setIds(["sjkrrmBnpGE", "TIokr8jJPkM"]);
+      setIds(["9ou1pl0XNRs", "VwR3LBbL6Jk"]); //ustawienie wartości domyślnych
     }
   }, []);
 

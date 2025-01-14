@@ -24,7 +24,7 @@ const Ambients = ({ ids, addId, deleteId }: AmbientsProps) => {
           <Heading size="md" margin={3} flex="1" textAlign="left">
             Ambients to help you focus
           </Heading>
-          <AccordionIcon marginLeft={3} />
+          <AccordionIcon marginLeft={3} data-testid="accordion-icon" />
         </AccordionButton>
 
         <AccordionPanel>

@@ -14,19 +14,19 @@ const NavBar = ({ onClick }: Props) => {
   const [note, setNote] = useState("");
 
   useEffect(() => {
-    const savedNote = localStorage.getItem("note");
+    const savedNote = localStorage.getItem("note"); //Pobranie wartości notatki z LocalStorage
     if (savedNote) setNote(savedNote);
   }, []);
 
   const handleSave = () => {
-    localStorage.setItem("note", note); // Save the note to localStorage
-    console.log("Note saved:", note);
+    localStorage.setItem("note", note); // Zapisanie notatki do LocalStorage
+    console.log("Note saved:", note); //debug
   };
 
   const handleDiscard = () => {
-    localStorage.removeItem("note"); // Remove the note from localStorage
-    setNote(""); // Clear the note state
-    console.log("Note discarded");
+    localStorage.removeItem("note"); // Usunięcie notatki z LocalStorage
+    setNote(""); //Ustawienie pustego pola tekstowego
+    console.log("Note discarded"); //debug
   };
 
   return (
@@ -41,19 +41,17 @@ const NavBar = ({ onClick }: Props) => {
             onClick={onOpen}
           />
 
-          {/* Settings Icon */}
           <IoMdSettings
             fontSize="30px"
             onClick={onClick}
             style={{ cursor: "pointer" }}
+            data-testid="settings-button"
           />
 
-          {/* Color Mode Switch */}
           <ColorModeSwitch />
         </HStack>
       </HStack>
 
-      {/* Notes Drawer */}
       <NotesDrawer
         isOpen={isOpen}
         onClose={onClose}
