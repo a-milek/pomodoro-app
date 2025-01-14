@@ -5,11 +5,12 @@ import Settings from "./components/Settings";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { Times } from "./configuration/Time";
-
+import { useKeepAwake } from "@sayem314/react-native-keep-awake";
 import VideoIds from "./components/VideoIds";
 
 function App() {
   const toast = useToast(); // Toast hook
+  useKeepAwake();
 
   const [times, setTimes] = useState<Times>(() => {
     const savedTimes = localStorage.getItem("times");
