@@ -28,8 +28,9 @@ interface Props {
 const Timer = ({ times, visibility, volume }: Props) => {
   const [isActive, setActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(times.focusTime * 60);
-  const [sessionCounter, setSessionCounter] = useState(0);
+  const [elapsedBeforePause, setElapsedBeforePause] = useState(0); // Tracks elapsed time before pausing
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [sessionCounter, setSessionCounter] = useState(0);
   const [currentMode, setCurrentMode] = useState<
     "focus" | "shortBreak" | "longBreak"
   >("focus");
@@ -50,7 +51,8 @@ const Timer = ({ times, visibility, volume }: Props) => {
 
       timerInterval = window.setInterval(() => {
         if (startTime) {
-          const elapsedTime = (Date.now() - startTime) / 1000;
+          const elapsedTime =
+            elapsedBeforePause + (Date.now() - startTime) / 1000; // Add previously elapsed time
           const newTimeRemaining = Math.ceil(
             sessionConfig[currentMode].time - elapsedTime
           );
@@ -65,7 +67,7 @@ const Timer = ({ times, visibility, volume }: Props) => {
     }
 
     return () => clearInterval(timerInterval);
-  }, [isActive, startTime, currentMode]);
+  }, [isActive, startTime, elapsedBeforePause, currentMode]);
 
   const handleSessionEnd = () => {
     play();
@@ -87,19 +89,36 @@ const Timer = ({ times, visibility, volume }: Props) => {
     }
 
     setActive(false);
+    setElapsedBeforePause(0); // Reset elapsed time
     setStartTime(null);
   };
 
   const resetTimer = () => {
     setTimeRemaining(sessionConfig[currentMode].time);
     setActive(false);
+    setElapsedBeforePause(0);
     setStartTime(null);
+  };
+
+  const toggleTimer = () => {
+    if (isActive) {
+      // Pause logic
+      const elapsedTime =
+        elapsedBeforePause + (Date.now() - (startTime ?? 0)) / 1000;
+      setElapsedBeforePause(elapsedTime); // Save elapsed time
+      setStartTime(null); // Clear startTime
+    } else {
+      // Resume logic
+      setStartTime(Date.now()); // Start tracking from now
+    }
+    setActive(!isActive);
   };
 
   const continueTimer = () => {
     setTimeRemaining(sessionConfig[currentMode].time);
     setActive(true);
     setStartTime(Date.now());
+    setElapsedBeforePause(0);
     onClose();
   };
 
@@ -128,9 +147,9 @@ const Timer = ({ times, visibility, volume }: Props) => {
           <Heading as="h4" fontSize="3xl" data-testid="timer-display">
             {visibility ? (
               <>
-                {hours > 0 && `${hours}h `}
-                {minutes > 0 && `${minutes}m `}
-                {seconds > 0 && `${seconds}s`}
+                {hours > 0 ? `${hours}h ` : ""}
+                {minutes > 0 ? `${minutes}m ` : ""}
+                {seconds > 0 ? `${seconds}s ` : ""}
               </>
             ) : (
               "Keep Going!"
@@ -142,7 +161,7 @@ const Timer = ({ times, visibility, volume }: Props) => {
       <HStack align="center" justify="center" spacing="10px" margin={5}>
         <Button
           colorScheme={isActive ? "red" : "green"}
-          onClick={() => setActive(!isActive)}
+          onClick={toggleTimer}
           data-testid="start-button"
         >
           {isActive ? (
