@@ -31,7 +31,7 @@ const NavBar = ({ onClick }: Props) => {
 
   return (
     <>
-      <HStack justifyContent="space-between" p={4}>
+      <HStack justifyContent="space-between">
         <Image src={pomidoro} boxSize="50px" alt="Pomidoro Logo" />
 
         <HStack spacing="4">

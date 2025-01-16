@@ -53,10 +53,9 @@ function App() {
       templateAreas={{
         base: `"nav" "main"`,
       }}
-      width="95vw"
     >
       {/* NavBar Section */}
-      <GridItem area="nav" margin="0">
+      <GridItem area="nav" width="80vw">
         <NavBar onClick={() => setShowSettings(!showSettings)} />
       </GridItem>
 
