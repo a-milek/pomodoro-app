@@ -55,7 +55,7 @@ function App() {
       }}
     >
       {/* NavBar Section */}
-      <GridItem area="nav" width="80vw">
+      <GridItem area="nav" width="90vw">
         <NavBar onClick={() => setShowSettings(!showSettings)} />
       </GridItem>
 
