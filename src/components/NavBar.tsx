@@ -31,10 +31,10 @@ const NavBar = ({ onClick }: Props) => {
 
   return (
     <>
-      <HStack justifyContent="space-between">
+      <HStack justifyContent="space-between" paddingRight={3}>
         <Image src={pomidoro} boxSize="50px" alt="Pomidoro Logo" />
 
-        <HStack spacing="4">
+        <HStack spacing="4" paddingRight={4}>
           <IoIosBook
             fontSize="30px"
             style={{ cursor: "pointer" }}

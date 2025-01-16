@@ -1,11 +1,15 @@
 
 
 #root {
-  margin: 0 auto; /* Center the #root container */
+  margin: 0 auto;  /* Center the #root container */
   padding: 2rem;
   text-align: center;
-  box-sizing: border-box; /* Ensure padding is included in the element's width */
-  overflow: hidden
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;  /* Ensure it spans full width */
+  display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .logo {
