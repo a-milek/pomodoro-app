@@ -1,4 +1,5 @@
 import "./App.css";
+
 import Timer from "./components/Timer";
 import { Grid, GridItem, useToast } from "@chakra-ui/react";
 import Settings from "./components/Settings";
@@ -49,47 +50,49 @@ function App() {
   });
 
   return (
-    <Grid
-      templateAreas={{
-        base: `"nav" "main"`,
-      }}
-    >
-      {/* NavBar Section */}
-      <GridItem area="nav" width="90vw">
-        <NavBar onClick={() => setShowSettings(!showSettings)} />
-      </GridItem>
+    <>
+      <Grid
+        templateAreas={{
+          base: `"nav" "main"`,
+        }}
+      >
+        {/* NavBar Section */}
+        <GridItem area="nav" width="90vw">
+          <NavBar onClick={() => setShowSettings(!showSettings)} />
+        </GridItem>
 
-      {/* Main Section */}
-      <GridItem area={"main"}>
-        {showSettings ? (
-          <Settings
-            times={times}
-            updateTimes={updateTimes}
-            visibility={visibility}
-            setVisibility={setVisibility}
-            volume={volume}
-            setVolume={updateVolume}
-            handleSave={(tempTimes) => {
-              updateTimes(tempTimes);
+        {/* Main Section */}
+        <GridItem area={"main"}>
+          {showSettings ? (
+            <Settings
+              times={times}
+              updateTimes={updateTimes}
+              visibility={visibility}
+              setVisibility={setVisibility}
+              volume={volume}
+              setVolume={updateVolume}
+              handleSave={(tempTimes) => {
+                updateTimes(tempTimes);
 
-              toast({
-                title: "Settings Saved!",
-                description: "Your settings have been updated.",
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-              });
-              setShowSettings(false);
-            }}
-          />
-        ) : (
-          <>
-            <Timer times={times} volume={volume} visibility={visibility} />
-            <VideoIds />
-          </>
-        )}
-      </GridItem>
-    </Grid>
+                toast({
+                  title: "Settings Saved!",
+                  description: "Your settings have been updated.",
+                  status: "success",
+                  duration: 3000,
+                  isClosable: true,
+                });
+                setShowSettings(false);
+              }}
+            />
+          ) : (
+            <>
+              <Timer times={times} volume={volume} visibility={visibility} />
+              <VideoIds />
+            </>
+          )}
+        </GridItem>
+      </Grid>
+    </>
   );
 }
 
